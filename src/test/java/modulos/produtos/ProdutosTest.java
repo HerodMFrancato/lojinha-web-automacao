@@ -4,6 +4,7 @@ import org.junit.jupiter.api.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import paginas.LoginPage;
 
 import java.util.concurrent.TimeUnit;
 
@@ -18,18 +19,18 @@ public class ProdutosTest {
         navegador = new ChromeDriver();
         navegador.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         navegador.manage().window().maximize();
+        navegador.get("http://165.227.93.41/lojinha-web/v2/");
     }
-
     @Test
     @DisplayName("Não é permitido registrar produto igual a zero")
     public void testNaoEPermitidoRegistrarProdutoComValorIgualAZero() {
-        navegador.get("http://165.227.93.41/lojinha-web/v2/");
-        navegador.findElement(By.cssSelector("label[for='usuario']")).click();
-        navegador.findElement(By.id("usuario")).sendKeys("admin");
-        navegador.findElement(By.cssSelector("label[for='senha']")).click();
-        navegador.findElement(By.id("senha")).sendKeys("admin");
-        navegador.findElement(By.cssSelector("button[type='submit']")).click();
-        navegador.findElement(By.linkText("ADICIONAR PRODUTO")).click();
+        new LoginPage(navegador)
+                .informarOUsuario("admin")
+                .informarASenha("admin")
+                .submeterFormularioDeLogin()
+                .acessarOFormularioDeAdicaoDeNovoProduto();
+
+
         navegador.findElement(By.id("produtonome")).sendKeys("Iphone 16");
         navegador.findElement(By.id("produtovalor")).sendKeys("000");
         navegador.findElement(By.id("produtocores")).sendKeys("Branco");
