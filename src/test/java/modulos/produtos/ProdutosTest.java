@@ -24,19 +24,17 @@ public class ProdutosTest {
     @Test
     @DisplayName("Não é permitido registrar produto igual a zero")
     public void testNaoEPermitidoRegistrarProdutoComValorIgualAZero() {
-        new LoginPage(navegador)
+        String mensagemApresentada = new LoginPage(navegador)
                 .informarOUsuario("admin")
                 .informarASenha("admin")
                 .submeterFormularioDeLogin()
-                .acessarOFormularioDeAdicaoDeNovoProduto();
-
-
-        navegador.findElement(By.id("produtonome")).sendKeys("Iphone 16");
-        navegador.findElement(By.id("produtovalor")).sendKeys("000");
-        navegador.findElement(By.id("produtocores")).sendKeys("Branco");
-        navegador.findElement(By.cssSelector("button[type='submit']")).click();
-        String mensagemToats = navegador.findElement(By.cssSelector(".toast.rounded")).getText();
-        Assertions.assertEquals("O valor do produto deve estar entre R$ 0,01 e R$ 7.000,00", mensagemToats);
+                .acessarOFormularioDeAdicaoDeNovoProduto()
+                .inserirNomeDoProduto("Iphone 16")
+                .inserirValorDoProduto("000")
+                .inserirCorDoProduto("Branco")
+                .submeterFormularioDeAdicaoComErro()
+                .capturarMensagemApresentada();
+        Assertions.assertEquals("O valor do produto deve estar entre R$ 0,01 e R$ 7.000,00", mensagemApresentada);
     }
 
     @AfterEach
